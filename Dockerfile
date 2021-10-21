@@ -10,12 +10,12 @@ RUN apt-get update && \
     mkdir -p /var/run/sshd
 
 COPY files/sshd_config /etc/ssh/
-COPY files/create-sftp-user.sh /usr/local/bin/
-COPY files/entrypoint.sh /
-RUN ["chmod", "+x", "/entrypoint.sh"]
-RUN ["chmod", "+x", "/usr/local/bin/create-sftp-user.sh"]
+COPY files/create-sftp-user /usr/local/bin/
+COPY files/entrypoint /
+RUN ["chmod", "+x", "/entrypoint"]
+RUN ["chmod", "+x", "/usr/local/bin/create-sftp-user"]
 RUN ["chmod", "+x", "/etc/ssh/sshd_config"]
 
 EXPOSE 22
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint"]
