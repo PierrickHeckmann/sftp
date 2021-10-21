@@ -1,5 +1,4 @@
 FROM debian:buster
-MAINTAINER Adrian Dvergsdal [atmoz.net]
 
 # Steps done in one RUN layer:
 # - Install packages
@@ -8,12 +7,15 @@ MAINTAINER Adrian Dvergsdal [atmoz.net]
 RUN apt-get update && \
     apt-get -y install openssh-server && \
     rm -rf /var/lib/apt/lists/* && \
-    mkdir -p /var/run/sshd && \
+    mkdir -p /var/run/sshd
 
-COPY files/sshd_config /etc/ssh/sshd_config
-COPY files/create-sftp-user /usr/local/bin/
-COPY files/entrypoint /
+COPY files/sshd_config /etc/ssh/
+COPY files/create-sftp-user.sh /usr/local/bin/
+COPY files/entrypoint.sh /
+RUN ["chmod", "+x", "/entrypoint.sh"]
+RUN ["chmod", "+x", "/usr/local/bin/create-sftp-user.sh"]
+RUN ["chmod", "+x", "/etc/ssh/sshd_config"]
 
 EXPOSE 22
 
-ENTRYPOINT ["/entrypoint"]
+ENTRYPOINT ["/entrypoint.sh"]
